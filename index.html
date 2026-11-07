@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backrooms: Uyan</title>
+<meta name="description" content="Backrooms: Uyan — Cavad tərəfindən hazırlanmış qorxu oyunu. Windows və Android üçün endir.">
+<meta property="og:title" content="Backrooms: Uyan">
+<meta property="og:description" content="Sarı otaqlar. Sonsuz uğultu. Sağ qalmaq üçün parçaları tap.">
+<meta property="og:image" content="assets/gorunuler.webp">
+<meta name="theme-color" content="#0c0b04">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230c0b04'/><text x='50' y='72' font-size='70' text-anchor='middle' fill='%23e6d65a' font-family='Arial Black'>U</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0b04; --bg2:#15130a; --ink:#ece6c2; --dim:#a39d78; --yellow:#e6d65a; --line:#3a3516;
+  --font:'Archivo','Arial Narrow',Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.55;overflow-x:hidden;
+  padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.09;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:49;
+  background:radial-gradient(ellipse at 50% 40%,transparent 40%,rgba(0,0,0,.6) 100%)}
+a{color:var(--yellow)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--yellow);outline-offset:3px}
+.wrap{width:min(1100px,100% - 40px);margin-inline:auto}
+
+/* top bar */
+.top{position:absolute;top:0;left:0;right:0;z-index:10;padding:calc(18px + env(safe-area-inset-top)) 0 0}
+.top .wrap{display:flex;justify-content:flex-end}
+.lang{display:flex;border:1px solid var(--line)}
+.lang button{background:none;border:0;color:var(--dim);font:600 .8rem var(--font);padding:8px 14px;cursor:pointer;letter-spacing:.08em}
+.lang button[aria-pressed="true"]{background:var(--yellow);color:#14120a}
+
+/* hero */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;padding:110px 0 70px;
+  background:
+   radial-gradient(ellipse 60% 50% at 70% 20%,rgba(230,214,90,.16),transparent 70%),
+   linear-gradient(180deg,#141206,var(--bg))}
+.hero::before{ /* ceiling tile grid */
+  content:"";position:absolute;inset:0;opacity:.5;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:90px 90px;
+  transform:perspective(500px) rotateX(55deg) translateY(-30%) scale(2.2);transform-origin:50% 0;
+  mask-image:linear-gradient(180deg,#000 0%,transparent 60%);-webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 60%)}
+.hero .wrap{position:relative}
+h1{font-weight:900;font-stretch:110%;line-height:.92;letter-spacing:-.01em;text-transform:uppercase;
+  font-size:clamp(2.9rem,11.5vw,8.2rem);color:var(--yellow);
+  text-shadow:0 0 28px rgba(230,214,90,.35),3px 0 0 rgba(255,60,40,.18),-3px 0 0 rgba(60,200,255,.14);
+  animation:flicker 2.4s .2s both}
+h1 span{display:block}
+@keyframes flicker{
+  0%,6%,9%,14%{opacity:0}
+  7%,11%,16%{opacity:.9}
+  20%{opacity:.15} 24%{opacity:1} 27%{opacity:.4} 30%,100%{opacity:1}}
+.tag{margin-top:22px;font-size:clamp(1rem,2.4vw,1.3rem);color:var(--dim);max-width:34ch}
+.cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:38px}
+.btn{display:inline-flex;flex-direction:column;gap:2px;text-decoration:none;min-width:230px;padding:16px 24px;
+  border:1px solid var(--yellow);color:var(--yellow);font-weight:700;font-size:1.05rem;transition:background .2s,color .2s}
+.btn small{font-weight:400;font-size:.78rem;color:var(--dim);transition:color .2s}
+.btn:hover,.btn:focus-visible{background:var(--yellow);color:#14120a}
+.btn:hover small,.btn:focus-visible small{color:#4a4520}
+.btn.solid{background:var(--yellow);color:#14120a}
+.btn.solid small{color:#4a4520}
+.btn.solid:hover{background:transparent;color:var(--yellow)}
+.btn.solid:hover small{color:var(--dim)}
+.note{margin-top:16px;font-size:.85rem;color:var(--dim);max-width:52ch}
+
+/* sections */
+section{padding:clamp(60px,10vw,110px) 0}
+h2{font-weight:800;font-stretch:105%;font-size:clamp(1.7rem,4.5vw,2.8rem);line-height:1.05;margin-bottom:28px;text-transform:uppercase;color:var(--yellow)}
+.shot{border:1px solid var(--line);background:var(--bg2);padding:8px}
+.shot img{display:block;width:100%;height:auto}
+.make{display:grid;grid-template-columns:1fr 1.5fr;gap:clamp(24px,5vw,60px);align-items:center}
+.make p{color:var(--dim);font-size:1.1rem;max-width:34ch}
+@media(max-width:760px){.make{grid-template-columns:1fr}}
+
+.dl{background:var(--bg2);border-block:1px solid var(--line)}
+.dl .cta{margin-top:0}
+
+dl.credits{display:grid;grid-template-columns:max-content 1fr;gap:0}
+.credits dt,.credits dd{padding:16px 0;border-top:1px solid var(--line)}
+.credits dt{color:var(--dim);padding-right:clamp(20px,6vw,70px)}
+.credits dd{font-weight:600}
+.credits dd a{margin-right:18px;display:inline-block}
+@media(max-width:620px){.credits{grid-template-columns:1fr}.credits dt{border-bottom:0;padding-bottom:0}.credits dd{border-top:0;padding-top:4px}.credits dt{border-top:1px solid var(--line)}}
+
+footer{padding:40px 0 50px;border-top:1px solid var(--line);color:var(--dim);font-size:.9rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:center}
+.claude{display:inline-flex;align-items:center;gap:10px;color:var(--dim);text-decoration:none;border:1px solid var(--line);padding:8px 14px}
+.claude:hover{color:var(--ink);border-color:var(--dim)}
+.claude svg{width:20px;height:20px;flex:none}
+
+@media(prefers-reduced-motion:reduce){h1{animation:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="wrap">
+  <div class="lang" role="group" aria-label="Dil / Dil">
+    <button data-l="az" aria-pressed="true">AZ</button>
+    <button data-l="tr" aria-pressed="false">TR</button>
+  </div>
+</div></div>
+
+<header class="hero">
+  <div class="wrap">
+    <h1><span>Backrooms:</span><span>Uyan</span></h1>
+    <p class="tag" data-az="Sarı otaqlar. Sonsuz uğultu. Sağ qalmaq üçün parçaları tap." data-tr="Sarı odalar. Sonsuz uğultu. Hayatta kalmak için parçaları bul."></p>
+    <div class="cta">
+      <a class="btn solid" href="downloads/BackroomsUyan.exe" data-exe>
+        <span data-az="Windows üçün endir" data-tr="Windows için indir"></span>
+        <small>.exe · 80 MB</small>
+      </a>
+      <a class="btn" href="downloads/BackroomsUyan.apk" download>
+        <span data-az="Android üçün endir" data-tr="Android için indir"></span>
+        <small>.apk · 13 MB</small>
+      </a>
+    </div>
+    <p class="note" data-az="Android: yükləmədən sonra APK-nı açanda “naməlum mənbələrdən quraşdırma”ya icazə ver." data-tr="Android: indirdikten sonra APK’yı açarken “bilinmeyen kaynaklardan yükleme”ye izin ver."></p>
+  </div>
+</header>
+
+<section id="goruntuler">
+  <div class="wrap">
+    <h2 data-az="Oyundan görüntülər" data-tr="Oyundan görüntüler"></h2>
+    <div class="shot"><img src="assets/gorunuler.webp" width="1568" height="442" alt="Backrooms: Uyan əsas menyu və ayarlar ekranı" loading="lazy"></div>
+  </div>
+</section>
+
+<section id="yapim" style="padding-top:0">
+  <div class="wrap make">
+    <div>
+      <h2 data-az="Yapım mərhələləri" data-tr="Yapım aşamaları"></h2>
+      <p data-az="Oyundakı canlının modeli üzərində işləyərkən." data-tr="Oyundaki yaratığın modeli üzerinde çalışırken."></p>
+    </div>
+    <div class="shot"><img src="assets/yapim.webp" width="1200" height="500" alt="Canlı modelinin üç rakursdan siluet görünüşü" loading="lazy"></div>
+  </div>
+</section>
+
+<section class="dl" id="yukle">
+  <div class="wrap">
+    <h2 data-az="Endir və oyna" data-tr="İndir ve oyna"></h2>
+    <div class="cta">
+      <a class="btn solid" href="downloads/BackroomsUyan.exe" data-exe>
+        <span>Windows (.exe)</span><small>80 MB</small>
+      </a>
+      <a class="btn" href="downloads/BackroomsUyan.apk" download>
+        <span>Android (.apk)</span><small>13 MB</small>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="kreditler">
+  <div class="wrap">
+    <h2 data-az="Kreditlər" data-tr="Krediler"></h2>
+    <dl class="credits">
+      <dt data-az="Yapımçı" data-tr="Yapımcı"></dt>
+      <dd>Cavad<br>
+        <a href="https://www.instagram.com/hnzd_cavad7" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.tiktok.com/@hnzd_cavad7" target="_blank" rel="noopener">TikTok</a>
+        <span style="color:var(--dim);font-weight:400">hnzd_cavad7</span>
+      </dd>
+      <dt data-az="Musiqi" data-tr="Müzik"></dt>
+      <dd>Care of Gongon — LoveChirp Entertainment<br>
+        <a href="https://youtu.be/kdSjYUw69mU" target="_blank" rel="noopener" data-az="YouTube-da dinlə" data-tr="YouTube’da dinle"></a>
+        <a href="https://youtube.com/@lovechirpentertainment" target="_blank" rel="noopener" data-az="Kanal" data-tr="Kanal"></a>
+      </dd>
+      <dt data-az="Backrooms modeli" data-tr="Backrooms modeli"></dt>
+      <dd>carlcapu9 (Sketchfab)<br>
+        <a href="https://sketchfab.com/carlcapu9" target="_blank" rel="noopener">sketchfab.com/carlcapu9</a>
+      </dd>
+    </dl>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© Cavad · Backrooms: Uyan</span>
+    <a class="claude" href="https://claude.ai" target="_blank" rel="noopener" aria-label="Claude AI">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><g fill="#d97757" transform="translate(50 50)">
+        <rect x="-4" y="-46" width="8" height="38" rx="4"/><rect x="-4" y="-46" width="8" height="38" rx="4" transform="rotate(30)"/><rect x="-4" y="-46" width="8" height="38" rx="4" transform="rotate(60)"/><rect x="-4" y="-46" width="8" height="38" rx="4" transform="rotate(90)"/><rect x="-4" y="-46" width="8" height="38" rx="4" transform="rotate(120)"/><rect x="-4" y="-46" width="8" height="38" rx="4" transform="rotate(150)"/><rect x="-4" y="-46" width="8" height="38" rx="4" transform="rotate(180)"/><rect x="-4" y="-46" width="8" height="38" rx="4" transform="rotate(210)"/><rect x="-4" y="-46" width="8" height="38" rx="4" transform="rotate(240)"/><rect x="-4" y="-46" width="8" height="38" rx="4" transform="rotate(270)"/><rect x="-4" y="-46" width="8" height="38" rx="4" transform="rotate(300)"/><rect x="-4" y="-46" width="8" height="38" rx="4" transform="rotate(330)"/>
+      </g></svg>
+      <span data-az="Claude AI-dan kiçik kömək alındı" data-tr="Claude AI’dan küçük yardım alındı"></span>
+    </a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // EXE linkini bura yaz (GitHub Releases linki):
+  var EXE_URL='https://github.com/ISTIFADECI_ADI/REPO_ADI/releases/latest/download/BackroomsUyan.exe';
+  document.querySelectorAll('[data-exe]').forEach(function(a){a.href=EXE_URL;a.removeAttribute('download')});
+  var btns=document.querySelectorAll('.lang button');
+  function set(l){
+    document.documentElement.lang=l;
+    document.querySelectorAll('[data-az]').forEach(function(e){e.textContent=e.getAttribute('data-'+l)});
+    btns.forEach(function(b){b.setAttribute('aria-pressed',b.dataset.l===l)});
+    try{localStorage.setItem('lang',l)}catch(e){}
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){set(b.dataset.l)})});
+  var s='az';try{s=localStorage.getItem('lang')||'az'}catch(e){}
+  set(s);
+})();
+</script>
+</body>
+</html>
